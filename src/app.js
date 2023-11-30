@@ -33,7 +33,9 @@ async function getChartTrackByIndex(req, res) {
   const response = await fetch(CONFIG.deezerApiUri + '/chart' + '?' + searchParams.toString());
   const data = await response.json();
 
-  if (!data?.tracks?.data?.[0])
+  if (data.error)
+    res.status(500).send(data.error.message);
+  else if (!data?.tracks?.data?.[0])
     res.status(404).send('No data found');
   else
     res.send(data.tracks.data[0]);
