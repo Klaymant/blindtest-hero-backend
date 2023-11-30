@@ -2,6 +2,7 @@ import express, { Router } from 'express';
 import fetch from 'node-fetch';
 import { CONFIG } from '../config.js';
 import dotenv from 'dotenv';
+import { rateLimitMiddleware } from './middlewares/RateLimiterMiddleware.js';
 
 dotenv.config();
 
@@ -16,6 +17,7 @@ router.use((_, res, next) => {
 
 router.get('/chart/track/:index', getChartTrackByIndex);
 
+app.use(rateLimitMiddleware);
 app.use('/', router); 
 
 app.listen(CONFIG.port, () => {
